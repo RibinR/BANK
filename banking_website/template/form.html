@@ -1,0 +1,91 @@
+{% load static %}
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Form Submission</title>
+
+</head>
+<body style="background-image:url('{% static 'form.jfif' %}');background-repeat:no-repeat;background-attachment:fixed;background-size: 100% 100%;">
+<form method="post" id="indexForm" data-courses-url="{% url 'ajax_load_courses' %}">
+    {% csrf_token %}
+    <h1 style="color:red;text-align:center;font-size:70px;"><ins>FORM</ins></h1><br><br><br>
+
+    <label><b style=font-size:100%;color:orange>Name:</b></label><br>
+    <input type="text" name="first_name" placeholder="Enter your name"><br><br>
+
+    <label><b style=font-size:100%;color:orange>DOB:</b></label><br>
+    <input type="date" ><br><br>
+
+    <label><b style=font-size:100%;color:orange>AGE:</b></label><br>
+    <input type="number" name="Age" placeholder="Enter your Age"><br><br>
+
+    <label><b style=font-size:130%;color:orange>Gender:</b></label><br>
+    <input type="radio" id="male" name="Gender" value="male"><label for="male">Male </label>
+    <input type="radio" id="female" name="Gender" value="female"><label for="female">Female </label>
+    <input type="radio" id="others" name="Gender" value="Others"><label for="others">Others </label><br><br>
+
+    <label for="number"><b style=font-size:130%;color:orange>Mob. No.:</b></label><br>
+    <input type="text" id="number" placeholder="Mobile number"><br><br>
+
+    <label><b style=font-size:100%;color:orange>Email_id:</b></label><br>
+    <input type="email" name="email" placeholder="Enter your email id"><br><br>
+
+    <label for="address"><b style=font-size:100%;color:orange>Address</b></label><br>
+    <textarea id="address" name="address" rows="5" cols="25"></textarea><br><br>
+
+    <label><b style=font-size:100%;color:orange>District</b></label><br>
+    <select name="programming" id="programming">
+        <option value="">---Select District---</option>
+            {% for i in program %}
+            <option value="{{i.id}}">{{i.name}}</option>
+            {% endfor %}
+        </select>
+        <br>
+    <label><b style=font-size:100%;color:orange>Branch</b></label><br>
+    <select name="courses" id="courses"></select><br><br>
+
+    <label for="account_type"><b style=font-size:100%;color:orange>Choose a account type:</b> </label><br>
+    <select name="account" id="account_type">
+        <option value="Current Account">Current Account</option>
+        <option value="Savings Account">Savings Account</option>
+        <option value="Salary Account">Salary Account</option>
+        <option value="RD Account">Recurring Deposit Account </option>
+        <option value="FD Account">Fixed Deposit Account </option>
+        <option value="NRI Account">NRI Account</option>
+    </select><br><br>
+
+    <label><b style=font-size:130%;color:orange>Materials Provide:</b></label><br>
+    <input type="checkbox" ><b>Debit Card</b>
+    <input type="checkbox" ><b>Credit Card</b>
+    <input type="checkbox" ><b>Internet banking</b>
+    <input type="checkbox" ><b>Cheque book</b><br><br><br>
+
+
+    <a href="Approval" class="btn btn-primary">Submit</a><br><br><br>
+
+
+
+</form>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    $("#programming").change(function () {
+      var url = $("#indexForm").attr("data-courses-url");  // get the url of the `load_courses` view
+      var programmingId = $(this).val();  // get the selected programming ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/load-courses/)
+        data: {
+          'programming': programmingId       // add the programming id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_courses` view function
+          $("#courses").html(data);  // replace the contents of the course input with the data that came from the server
+        }
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>
